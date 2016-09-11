@@ -1,17 +1,14 @@
-Forward modeling of magnetic field in spherical coordinates.
+# Forward modeling of magnetic field in spherical coordinates.
+## About
+
+Magnetic tesseroids is a collection of command-line tools for modeling the magnetic field.
+The magnetization models can be made of right rectangular prisms or tesseroids (spherical prisms). 
 
 To cite _magnetic tesseroids_ in publications, please use our paper published in Computers & Geosciences:
 
 >**Eldar Baykiev**, **Jörg Ebbing**, **Marco Brönner**, **Karl Fabian**, Forward modeling magnetic fields of induced and remanent magnetization in the lithosphere using tesseroids, _Computers & Geosciences_, Volume 96, November 2016, Pages 124-135, ISSN 0098-3004, http://dx.doi.org/10.1016/j.cageo.2016.08.004.
 
 Article can be found here http://www.sciencedirect.com/science/article/pii/S0098300416302278 or here http://goo.gl/x9g7gi (researchgate)
-
-
-## About
-
-Magnetic tesseroids is a collection of command-line tools for modeling the magnetic field.
-
-The magnetization models can be made of right rectangular prisms or tesseroids (spherical prisms). 
 
 ## Usage of _magnetic tesseroids_
 _Magnetic tesseroids_ are based on the existing program of Leonardo Uieda called tesseroids (Uieda, 2013) of version 1.1 (https://github.com/leouieda/tesseroids/releases/tag/v1.1). It inherits the interface of tesseroids-1.1 but with several changes. Present appendix describes constants and units used be the program, as well as input and output format.
