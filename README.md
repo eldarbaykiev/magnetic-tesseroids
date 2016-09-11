@@ -1,4 +1,4 @@
-# Forward modeling of magnetic field in spherical coordinates.
+# Forward modeling of magnetic field in spherical coordinates
 ## About
 
 Magnetic tesseroids is a collection of command-line tools for modeling the magnetic field.
