@@ -3,10 +3,8 @@ Forward modeling of magnetic field in spherical coordinates.
 To cite _magnetic tesseroids_ in publications, please use our paper published in Computers & Geosciences:
 
 >**Eldar Baykiev**, **Jörg Ebbing**, **Marco Brönner**, **Karl Fabian**, Forward modeling magnetic fields of induced and remanent magnetization in the lithosphere using tesseroids, _Computers & Geosciences_, Volume 96, November 2016, Pages 124-135, ISSN 0098-3004, http://dx.doi.org/10.1016/j.cageo.2016.08.004.
-(http://www.sciencedirect.com/science/article/pii/S0098300416302278)
 
-{Baykiev, 2016 #226}
-
+Article can be found here http://www.sciencedirect.com/science/article/pii/S0098300416302278 or here http://goo.gl/x9g7gi (researchgate)
 
 
 ## About
@@ -18,7 +16,7 @@ The magnetization models can be made of right rectangular prisms or tesseroids (
 ## Usage of _magnetic tesseroids_
 _Magnetic tesseroids_ are based on the existing program of Leonardo Uieda called tesseroids (Uieda, 2013) of version 1.1 (https://github.com/leouieda/tesseroids/releases/tag/v1.1). It inherits the interface of tesseroids-1.1 but with several changes. Present appendix describes constants and units used be the program, as well as input and output format.
 ### Constants
-1. Geocentric mean Earth's radius  R_E = 6378.137 km. 
+1. Geocentric mean Earth's radius  _R_E_ = 6378.137 km. 
 1. Magnetic permeability of a free space µ0 = 4p × 10-7 H·m-1
 
 ### List of programs
