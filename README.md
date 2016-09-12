@@ -13,7 +13,7 @@ Article can also be found here http://goo.gl/x9g7gi (researchgate).
 _Magnetic tesseroids_ are based on the existing program of Leonardo Uieda called tesseroids (Uieda, 2013) of version 1.1 (https://github.com/leouieda/tesseroids/releases/tag/v1.1). It inherits the interface of tesseroids-1.1 but with several changes. Present appendix describes constants and units used be the program, as well as input and output format.
 ### Constants
 1. Geocentric mean Earth's radius  _R_E_ = 6378.137 km. 
-1. Magnetic permeability of a free space µ0 = 4p × 10-7 H·m-1
+1. Magnetic permeability of a free space _µ_0_ = 4π × 10^-7 H·m^-1
 
 ### List of programs
 The tessbx, tessby, tessbz are programs that calculate the corresponding components (x - north, y - east, **z - up**) of the magnetic field of the tesseroid model on the computational grid. 
