@@ -6,14 +6,19 @@ clear all;
 close all;
 
 
+EARTH_RADIUS_TESS_M = 6378137.0;
+
 
 GRAD_WITH_ROTATION = 1;
 GRAD_CENTRAL_DIFF = 1;
 
 %% NAME OF DATASET
-DATASET = 'grad_400km_crust1.0_igrf_rect_W0_E35_S55_N75'; 
+DATASET = 'enter_your_grid_name'; 
 %name of the folder with calculated magnetic field grids
 %all grids in the folder must have the same gridpoints
+%IMPORTANT: grids should be produced by tessgrd program from tesseroids-1.1 
+%				  should start from the most south-western point
+%				  the increment should be in longitudes for each next point until the eastern border
 %initial tesseroid model files, that were used, should be present in the
 %folder
 
@@ -21,9 +26,11 @@ DATASET = 'grad_400km_crust1.0_igrf_rect_W0_E35_S55_N75';
 %here is an example, how one tesseroid model and its calculated grids
 %should look like in the folder:
 %[tesseroid model name].magtess - model file
-%[tesseroid model name]_Bx.txt - Bx component grid
-%[tesseroid model name]_By.txt - By component grid
-%[tesseroid model name]_Bz.txt - Bz component grid
+%[tesseroid model name].magtess_Bx.txt - Bx component grid
+%[tesseroid model name].magtess_By.txt - By component grid
+%[tesseroid model name].magtess_Bz.txt - Bz component grid
+
+
 
 MATLABPATH = userpath;
 PATH_DATA = strcat(MATLABPATH(1: end-1), '\Gradient_Calculator\'); 
@@ -220,7 +227,7 @@ for i = 2 : grid_num_lat_pts -1
     for j = 2 : grid_num_lon_pts -1
 
         %with rotation
-        if GRAD_WITH_ROTATION == 1
+        if GRAD_WITH_ROTATION == -1
             vect_w = from_loc_sphr_to_loc_sphr([Bx(i, j-1); By(i, j-1); Bz(i, j-1)], C_LON(i, j-1), C_LAT(i, j-1), C_LON(i, j), C_LAT(i, j));
             vect_e = from_loc_sphr_to_loc_sphr([Bx(i, j+1); By(i, j+1); Bz(i, j+1)], C_LON(i, j+1), C_LAT(i, j+1), C_LON(i, j), C_LAT(i, j));
             vect_s = from_loc_sphr_to_loc_sphr([Bx(i-1, j); By(i-1, j); Bz(i-1, j)], C_LON(i-1, j), C_LAT(i-1, j), C_LON(i, j), C_LAT(i, j));
