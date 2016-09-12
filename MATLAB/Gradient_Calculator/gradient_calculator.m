@@ -13,7 +13,7 @@ GRAD_WITH_ROTATION = 1;
 GRAD_CENTRAL_DIFF = 1;
 
 %% NAME OF DATASET
-DATASET = 'enter_your_grid_name'; 
+DATASET = 'enter_your_dataset_name'; 
 %name of the folder with calculated magnetic field grids
 %all grids in the folder must have the same gridpoints
 %IMPORTANT: grids should be produced by tessgrd program from tesseroids-1.1 
