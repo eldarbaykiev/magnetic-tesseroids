@@ -24,8 +24,8 @@ The input model file should be a text file where each line describe one tesseroi
 
 `W`, `E`, `S`, `N` correspond to the western, eastern, southern and northern edges of a tesseroid (_λ_1_, _λ_2_, _ϕ_1_, _ϕ_2_ respectively) expressed in decimal degrees [°].  
 `HEIGHT_OF_TOP` and `HEIGHT_OF_BOTTOM` define the top and the bottom of tesseroid (_r_2_ and _r_1_ respectively). Both are counted from geocentric mean Earth's radius in meters [m]. If a tesseroid should be placed beneath the mean surface, than the values of these parameters should be negative. Note that `HEIGHT_OF_TOP` > `HEIGHT_OF_BOTTOM`.
-`DENSITY` is the density _rho_ of tesseroid in kilogram per cubic meter [kg/m^3]
-`SUSCEPTIBILITY` is the susceptibility _chi_ of tesseroid in SI units.
+`DENSITY` is the density _ρ_ of tesseroid in kilogram per cubic meter [kg/m^3]
+`SUSCEPTIBILITY` is the susceptibility _χ_ of tesseroid in SI units.
 `BX`, `BY` and `BZ` are the components of the magnetizing field in the local North-East-Up Cartesian coordinate system of a tesseroids' geometric center. They can be taken from any core field's model. Values are given in nanotesla [nT].
 In case of remanent magnetic field modeling, susceptibility must be set 1 SI and `BX`, `BY` and `BZ` values than would define the direction of remanent magnetization vector.
 This example shows a model made of 3 neighboring tesseroids near the North Pole:
