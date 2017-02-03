@@ -6,7 +6,7 @@ Hold the version number of the project.
 #define _TESSEROIDS_VERSION_H_
 
 /** Current project version number */
-const char tesseroids_version[] = "0.01";
+const char tesseroids_version[] = "1.0";
 
 
 /** Print version and license information
