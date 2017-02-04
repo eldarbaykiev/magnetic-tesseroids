@@ -24,7 +24,6 @@ int my_isnan(double d)
 
 #define NaN log(-1.0)
 #define FT2KM (1.0/0.0003048)
-#define PI 3.141592654
 #define RAD2DEG (180.0/PI)
 
 #ifndef SEEK_SET

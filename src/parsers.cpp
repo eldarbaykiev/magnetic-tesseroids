@@ -362,6 +362,191 @@ int parse_tessb_args(int argc, char **argv, const char *progname,
     return 0;
 }
 
+//parse arguments for gradient calculator
+int parse_gradcalc_args(int argc, char **argv, const char *progname, GRADCALC_ARGS *args, void (*print_help)(const char *))
+{
+	int bad_args = 0, parsed_args = 0, total_args = 5, i;
+	char *params;
+
+	 /* Default values for options */
+	args->verbose = 0;
+	args->logtofile = 0;
+
+	args->gridbx_set = FALSE;
+  	args->gridby_set = FALSE;
+	args->gridbz_set = FALSE;
+	args->out_set = -1;
+
+	args->bz_NEU_NED = -1;
+	args->bz_NEU_NED_set = FALSE;
+
+
+	/* Parse arguments */
+	for(i = 1; i < argc; i++)
+	{
+		if(argv[i][0] == '-')
+		{
+			switch(argv[i][1])
+			{
+				case 'h':
+					if(argv[i][2] != '\0')
+					{
+						//log_error("invalid argument '%s'", argv[i]);
+						printf("invalid argument '%s'\n", argv[i]);
+						bad_args++;
+						break;
+					}
+					print_help(progname);
+					return 2;
+				case '-':
+               				{
+					params = &argv[i][2];
+					if(strcmp(params, "version"))
+					{
+						printf("invalid argument '%s'\n", argv[i]);
+						bad_args++;
+					}
+					else
+					{
+						print_version(progname);
+						return 2;
+					}
+					break;
+					}
+				case 'b':
+					params = &argv[i][2];
+					if(strlen(params) <= 1)
+					{
+						printf("bad input argument -b. Missing component and filename\n");
+						bad_args++;
+						break;
+                    			}
+					else
+					{
+						switch(argv[i][2])
+						{
+							case 'x':
+								if(args->gridbx_set)
+								{
+									printf("invalid argument '%s', gridfile bx already set\n", argv[i]);
+									bad_args++;
+									break;   
+								}
+								else
+								{
+				    					args->gridbx_set = 1; 
+									args->gridbx_fn = &argv[i][3];
+								}
+                                				break;
+			    				case 'y':
+								if(args->gridby_set)
+								{
+									printf("invalid argument '%s', gridfile by already set\n", argv[i]);
+									bad_args++;
+									break;   
+								}
+								else
+								{
+									args->gridby_set = 1;
+									args->gridby_fn = &argv[i][3];
+								}
+								break;
+							case 'z':
+								if(args->gridbz_set)
+								{
+									printf("invalid argument '%s', gridfile by already set\n", argv[i]);
+									bad_args++;
+									break;   
+								}
+								else
+								{
+									args->gridbz_set = 1;
+									args->gridbz_fn = &argv[i][3];
+								}
+								break;
+							default:
+								printf("invalid argument '%s', wrong component\n", argv[i]);
+								bad_args++;
+								break;
+						}
+                    			}
+                    			break;
+ 				case 'c':
+					params = &argv[i][2];
+
+					if(args->bz_NEU_NED_set)
+					{
+						printf("invalid argument '%s', coordinate system is already set\n", argv[i]);
+						bad_args++;
+						break;   
+					}
+					if(strlen(params) > 1)
+					{
+						printf("invalid argument '%s', specify coordinate system in the input grids\n", argv[i]);
+						bad_args++;
+						break;
+					}
+					if(argv[i][2] == '1')
+					{
+						args->bz_NEU_NED_set = 1;
+						args->bz_NEU_NED = 1;
+						break;
+					}
+					else if(argv[i][2] == '2')
+					{
+						args->bz_NEU_NED_set = 1;
+						args->bz_NEU_NED = -1;
+						break;
+					}
+					else
+					{
+						printf("invalid argument '%s', there are only NED (1) and NEU (2, default) coordinate systems\n", argv[i]);
+						bad_args++;
+						break;
+        				}
+                    			break;
+				case 'o':
+					params = &argv[i][2];
+
+					if(args->out_set>=0)
+					{
+						printf("invalid argument '%s', output format is already set\n", argv[i]);
+						bad_args++;
+						break;   
+					}
+
+					if(strlen(params) != 1)
+					{
+						printf("invalid argument '%s', specify output format\n", argv[i]);
+						bad_args++;
+						break;
+					}
+					//TODO Add check if it is integer
+					args->out_set = atoi(params);
+					break;
+				default:
+					printf("invalid argument '%s'\n", argv[i]);
+					bad_args++;
+					break;
+			}
+		}
+	}
+
+	if(parsed_args > total_args)
+	{
+		//log_error("%s: too many input arguments. given %d, max %d.", progname, parsed_args, total_args);
+	}
+	if(bad_args > 0)
+	{
+		//log_error("%d bad input argument(s)", bad_args);
+		return 1;
+	}
+	if(parsed_args < total_args)
+	{
+		return 3;
+	}
+	return 0;
+}
 
 /* Strip trailing spaces and newlines from the end of a string */
 void strstrip(char *str)

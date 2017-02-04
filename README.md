@@ -74,6 +74,13 @@ Usage:
 ### tessutil_gradient_calculator
 Gradient calculator (Baykiev et al., in press).
 Usage: 
-> `tessutil_gradient_calculator -bx[Bx grid file] -by[By grid file] -bz[Bx grid file] -o[output file] -c2 `
+> `tessutil_gradient_calculator -bx[Bx grid file] -by[By grid file] -bz[Bx grid file] -o[output component] -c2 >> output_file.dat`
 
 All grid files should be in tessgrd format. With option -c1 program read input grid bz as its direction is upward, with option -c2 - downward, just as in magnetic tesseroids output. Output of gradient calculator is always in North-East-Down coordinate system.
+
+### tessutil_combine_grids
+Sums calculated grids.
+Usage:
+> `tessutil_combine_grids [grid file1] [factor1] ... [grid fileN] [factorN] >> output_file.dat`
+
+Each grid is multiplied by factor (susceptibility) and then the sum of all grids is calculated.

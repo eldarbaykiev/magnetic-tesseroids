@@ -53,4 +53,8 @@ const double M_0 = 4 * (PI) * 0.0000001;
 
 const double DEG2RAD = (PI)/180.0;
 
+
+#define FALSE 0
+#define TRUE 1
+
 #endif
