@@ -65,6 +65,14 @@ The programs' output is a modified grid file where in the end of each line the c
 ### Additional features
 Magnetic tesseroids support features like piping and integration accuracy adjustment from tesseroids-1.1. Please, check sections in the tesseroids-1.1 manual (Uieda, 2013) relative to the gravity calculation programs to get more information.
 
-## MATLAB scripts
-### magtess_magnetize_tesseroids.m
-This script is made to 'magnetize' any existing tesseroid model by the IGRF11 main field model (Finlay et al., 2010). Script for IGRF field calculation can be found here https://www.mathworks.com/matlabcentral/fileexchange/34388-international-geomagnetic-reference-field--igrf--model
+## Utilities
+### tessutil_magnetize_model
+This program is made to 'magnetize' any existing tesseroid model by any given main field spherical harmonic model.
+Usage: 
+> `tessutil_magnetize_model [SH coeff file] [input tesseroid model file] [day] [month] [year] [output tesseroid model file] `
+
+### tessutil_gradient_calculator
+Gradient calculator (Baykiev et al., in press).
+Usage: 
+> `tessutil_gradient_calculator [Bx grid file] [By grid file] [Bx grid file] `
+All grid files should be in tessgrd format.
