@@ -35,13 +35,194 @@ void save_to_file(char* filename, double* longitudes, double* latitudes, double*
     return;
 }
 
+void save_all_to_file(char* filename, double* longitudes, double* latitudes, int n_values,  double* values1,  double* values2,  double* values3,  double* values4,  double* values5,  double* values6,  double* values7)
+{
+    FILE * fp = fopen(filename, "w");
+    if (fp == NULL)
+    {
+
+        printf("ERROR: Can not open file to save calculated values.\n");
+        return;
+    }
+  
+  
+
+    for (int h = 0; h < n_values; h++)
+        fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf\n", longitudes[h], latitudes[h], values1[h], values2[h], values3[h], values4[h], values5[h], values6[h], values7[h]);
+
+    fclose(fp);
+    return;
+}
+
+
 
 
 int main(int argc, char**argv)
 {
-    if (argc != 4)
-        exit(EXIT_FAILURE);
+    int gridbx_set = 0;
+    int gridby_set = 0;
+    int gridbz_set = 0;
+    int bz_NEU_NED = -1;
+    int bz_NEU_NED_set = 0;
 
+    int output_file_set = 0;
+
+    char* gridbx_fn;
+    char* gridby_fn;
+    char* gridbz_fn;
+
+    char* out_fn;
+
+    char *params;
+
+    int bad_args = 0, parsed_args = 0, total_args = 1;
+    for(int i = 1; i < argc; i++)
+    {
+        if(argv[i][0] == '-')
+        {
+            switch(argv[i][1])
+            {
+                case 'h':
+                    if(argv[i][2] != '\0')
+                    {
+                        //log_error("invalid argument '%s'", argv[i]);
+			printf("invalid argument '%s'\n", argv[i]); 																																	
+                        bad_args++;
+                        break;
+   		    }
+		    printf("here should be help\n");
+                    return 2;
+		case 'b':
+                    params = &argv[i][2];
+                    if(strlen(params) <= 1)
+                    {
+                        printf("bad input argument -b. Missing component and filename\n");
+                        bad_args++;
+                    }
+                    else
+                    {
+                        switch(argv[i][2])
+			{
+			    case 'x':
+				if(gridbx_set)
+				{
+				    printf("invalid argument '%s', gridfile bx already set\n", argv[i]);
+				    bad_args++;
+                                    break;   
+				}
+				else
+				{
+				    gridbx_set = 1;
+				   
+				    gridbx_fn = &argv[i][3];
+				}
+                                break;
+			    case 'y':
+				if(gridby_set)
+				{
+				    printf("invalid argument '%s', gridfile by already set\n", argv[i]);
+				    bad_args++;
+                                    break;   
+				}
+				else
+				{
+				    gridby_set = 1;
+				    gridby_fn = &argv[i][3];
+				}
+                                break;
+			    case 'z':
+				if(gridbz_set)
+				{
+				    printf("invalid argument '%s', gridfile by already set\n", argv[i]);
+				    bad_args++;
+                                    break;   
+				}
+				else
+				{
+				    gridbz_set = 1;
+				    gridbz_fn = &argv[i][3];
+				}
+                                break;
+			    default:
+				printf("invalid argument '%s', wrong component\n", argv[i]);
+                    		bad_args++;
+                    		break;
+			}
+                    }
+                    break;
+ 		case 'c':
+		    params = &argv[i][2];
+
+		    if(bz_NEU_NED_set)
+		    {
+			printf("invalid argument '%s', coordinate system is already set\n", argv[i]);
+			bad_args++;
+                        break;   
+		    }
+                    if(strlen(params) > 1)
+                    {
+                        printf("invalid argument '%s', specify coordinate system in the input grids\n", argv[i]);
+                        bad_args++;
+			break;
+                    }
+		    if(argv[i][2] == '1')
+                    {
+                        bz_NEU_NED_set = 1;
+			bz_NEU_NED = 1;
+                        break;
+                    }
+                    else if(argv[i][2] == '2')
+                    {
+                        bz_NEU_NED_set = 1;
+			bz_NEU_NED = -1;
+                        break;
+                    }
+		    else
+                    {
+                        printf("invalid argument '%s', there are only NED (1) and NEU (2, default) coordinate systems\n", argv[i]);
+                        bad_args++;
+			break;
+                    }
+                    break;
+		case 'o':
+		    params = &argv[i][2];
+
+                    
+		    if( output_file_set)
+		    {
+			printf("invalid argument '%s', output filename is already set\n", argv[i]);
+			bad_args++;
+                        break;   
+		    }
+
+		    
+                    if(strlen(params) == 0)
+                    {
+                        printf("invalid argument '%s', specify output filename\n", argv[i]);
+                        bad_args++;
+			break;
+                    }
+                    out_fn = params;
+		    output_file_set = 1;
+		    break;
+              
+		default:
+		    printf("invalid argument '%s'\n", argv[i]);
+                    bad_args++;
+	            break;
+	    }
+	}
+    }
+    
+    
+
+    if ((gridbx_set == 0) || (gridbx_set == 0) || (gridbx_set == 0))
+    {
+	printf("no input grids\n");
+	exit(EXIT_FAILURE);
+    }
+
+    printf("bz_NEU_NED: %d\n", bz_NEU_NED);
 
     //double columnvect[3] = {1, 1, 2};
     //double columnvectnew[3];
@@ -63,7 +244,8 @@ int main(int argc, char**argv)
     ssize_t read;
     int n_lines = 0;
 
-    FILE * bxfp = fopen(argv[1], "r");
+
+    FILE * bxfp = fopen(gridbx_fn, "r");
     if (bxfp == NULL)
     {
         printf("ERROR: Can not open file with Bx values.\n");
@@ -137,7 +319,7 @@ int main(int argc, char**argv)
 
     /* read other grids */
     // By
-    FILE * byfp = fopen(argv[2], "r");
+    FILE * byfp = fopen(gridby_fn, "r");
     if (byfp == NULL)
     {
         printf("ERROR: Can not open file with Bx values.\n");
@@ -169,7 +351,7 @@ int main(int argc, char**argv)
     }
 
     // Bz
-    FILE * bzfp = fopen(argv[1], "r");
+    FILE * bzfp = fopen(gridbz_fn, "r");
     if (bzfp == NULL)
     {
         printf("ERROR: Can not open file with Bx values.\n");
@@ -186,7 +368,11 @@ int main(int argc, char**argv)
 	    //printf("%s", line);
             double dummy1, dummy2; 
 	    float dummy3;
-	    sscanf(line, GRID_FORMAT , &dummy1, &dummy2, &dummy3, &bz[n_lines2-1]);
+	    double bz_curr;
+	    sscanf(line, GRID_FORMAT , &dummy1, &dummy2, &dummy3,&bz_curr);	
+
+	    bz[n_lines2-1] = bz_NEU_NED* bz_curr; //COORDINATE SYSTEM NEU or NED
+	    
 
         }
 
@@ -268,15 +454,21 @@ int main(int argc, char**argv)
 	}
     }
 
-    save_to_file("Bxx.txt", lons, lats, bxx, n_lines);
-    save_to_file("Byx.txt", lons, lats, byx, n_lines);
-    save_to_file("Bzx.txt", lons, lats, bzx, n_lines);
+    if(output_file_set)
+	save_all_to_file(out_fn, lons, lats, n_lines, bxx, byx, bzx, bxy, byy, bzy, bzz);
+    else
+    {
 
-    save_to_file("Bxy.txt", lons, lats, bxy, n_lines);
-    save_to_file("Byy.txt", lons, lats, byy, n_lines);
-    save_to_file("Bzy.txt", lons, lats, bzy, n_lines);
+        save_to_file("Bxx.txt", lons, lats, bxx, n_lines);
+        save_to_file("Byx.txt", lons, lats, byx, n_lines);
+        save_to_file("Bzx.txt", lons, lats, bzx, n_lines);
 
-    save_to_file("Bzz.txt", lons, lats, bzz, n_lines);
+        save_to_file("Bxy.txt", lons, lats, bxy, n_lines);
+        save_to_file("Byy.txt", lons, lats, byy, n_lines);
+        save_to_file("Bzy.txt", lons, lats, bzy, n_lines);
+
+        save_to_file("Bzz.txt", lons, lats, bzz, n_lines);
+    }
     
 }
 
