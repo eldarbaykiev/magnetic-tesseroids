@@ -11,6 +11,7 @@ All values are in SI units!
 
 /* Mean Earth radius [\f$ m \f$] */
 const double MEAN_EARTH_RADIUS = 6378137.0;
+const double EARTH_RADIUS_IGRF_KM = 6371.2;
 
 /* The gravitational constant [\f$ m^3*kg^{-1}*s^{-1} \f$] */
 const double G = 0.00000000006673;
@@ -27,7 +28,11 @@ const double EOTVOS2SI = 0.000000001;
 const double SI2MGAL = 100000.0;
 
 /* Pi */
+#ifdef __cplusplus
 const double PI = 3.1415926535897932384626433832795;
+#else
+#define PI 3.1415926535897932384626433832795
+#endif
 
 /* minimum distance-to-size ratio for potential computations to be accurate */
 const double TESSEROID_POT_SIZE_RATIO = 1.5;
@@ -44,10 +49,8 @@ const double TESSEROID_GYY_SIZE_RATIO = 3;
 const double TESSEROID_GYZ_SIZE_RATIO = 4;
 const double TESSEROID_GZZ_SIZE_RATIO = 3;
 
+const double M_0 = 4 * (PI) * 0.0000001;
 
-
-
-const double M_0 = 4 * PI * 0.0000001;
-
+const double DEG2RAD = (PI)/180.0;
 
 #endif

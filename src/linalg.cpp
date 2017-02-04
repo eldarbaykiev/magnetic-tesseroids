@@ -4,11 +4,10 @@
 
 void conv_vect(double *vect, double lon1, double lat1, double lon2, double lat2, double *res)
 {
-	double d2r = PI/180.;
-	double a1 = d2r*lat1;
-	double b1 = d2r*lon1;
-    double a2 = d2r*lat2;
-    double b2 = d2r*lon2;
+	double a1 = DEG2RAD*lat1;
+	double b1 = DEG2RAD*lon1;
+    	double a2 = DEG2RAD*lat2;
+    	double b2 = DEG2RAD*lon2;
 
 	double cos_a1 = cos(PI/2.0-a1);
 	double sin_a1 = sin(PI/2.0-a1);
@@ -105,11 +104,10 @@ void conv_vect(double *vect, double lon1, double lat1, double lon2, double lat2,
 
 void conv_vect_fast(double *vect, double lon1, double lat1, double lon2, double lat2, double *res)
 {
-	double d2r = PI/180.;
-	double a1 = d2r*lat1;
-	double b1 = d2r*lon1;
-    double a2 = d2r*lat2;
-    double b2 = d2r*lon2;
+	double a1 = DEG2RAD*lat1;
+	double b1 = DEG2RAD*lon1;
+    	double a2 = DEG2RAD*lat2;
+    	double b2 = DEG2RAD*lon2;
 
 	double cos_a1 = cos(PI/2.0-a1);
 	double sin_a1 = sin(PI/2.0-a1);
@@ -153,3 +151,61 @@ void conv_vect_fast(double *vect, double lon1, double lat1, double lon2, double 
 	
 	return;
 }
+
+void from_loc_sphr_to_cart(double* columnvect_xyzloc, double colatitude, double longitude, double* columnvect_res)
+{
+/*IMPORTANT: this subroutine is in the coordinate system NED*/
+
+
+    double phi = colatitude*DEG2RAD;
+    double lambda = longitude*DEG2RAD;
+
+    double cos_phi = cos(phi);
+    double sin_phi = sin(phi);
+    double cos_lambda = cos(lambda);
+    double sin_lambda = sin(lambda);
+
+    double columnvect_phi_unit[3] = {-sin_phi*cos_lambda, -sin_phi*sin_lambda, cos_phi};
+    double columnvect_lambda_unit[3] = {-sin_lambda, cos_lambda, 0};
+    double columnvect_r_unit[3] = {cos_phi*cos_lambda, cos_phi*sin_lambda, sin_phi};
+
+    columnvect_res[0] = columnvect_phi_unit[0]*columnvect_xyzloc[0]+columnvect_lambda_unit[0]*columnvect_xyzloc[1]+columnvect_r_unit[0]*columnvect_xyzloc[2];
+    columnvect_res[1] = columnvect_phi_unit[1]*columnvect_xyzloc[0]+columnvect_lambda_unit[1]*columnvect_xyzloc[1]+columnvect_r_unit[1]*columnvect_xyzloc[2];
+    columnvect_res[2] = columnvect_phi_unit[2]*columnvect_xyzloc[0]+columnvect_lambda_unit[2]*columnvect_xyzloc[1]+columnvect_r_unit[2]*columnvect_xyzloc[2];
+
+    return;
+}
+
+void from_cart_to_loc_sphr(double* columnvect_xyzglob, double colatitude, double longitude, double* columnvect_res)
+{
+/*IMPORTANT: this subroutine is in the coordinate system NED*/
+
+
+    double phi = colatitude*DEG2RAD;
+    double lambda = longitude*DEG2RAD;
+
+    double cos_phi = cos(phi);
+    double sin_phi = sin(phi);
+    double cos_lambda = cos(lambda);
+    double sin_lambda = sin(lambda);
+
+    double rowvect_phi_unit[3] = {-sin_phi*cos_lambda, -sin_phi*sin_lambda, cos_phi};
+    double rowvect_lambda_unit[3] = {-sin_lambda, cos_lambda, 0};
+    double rowvect_r_unit[3] = {cos_phi*cos_lambda, cos_phi*sin_lambda, sin_phi};
+
+    columnvect_res[0] = rowvect_phi_unit[0]*columnvect_xyzglob[0]+rowvect_phi_unit[1]*columnvect_xyzglob[1]+rowvect_phi_unit[2]*columnvect_xyzglob[2];
+    columnvect_res[1] = rowvect_lambda_unit[0]*columnvect_xyzglob[0]+rowvect_lambda_unit[1]*columnvect_xyzglob[1]+rowvect_lambda_unit[2]*columnvect_xyzglob[2];
+    columnvect_res[2] = rowvect_r_unit[0]*columnvect_xyzglob[0]+rowvect_r_unit[1]*columnvect_xyzglob[1]+rowvect_r_unit[2]*columnvect_xyzglob[2];
+
+    return;
+}
+
+void from_loc_sphr_to_loc_sphr(double* columnvect_xyzloc, double colatitude1, double longitude1, double colatitude2, double longitude2, double* columnvect_res)
+{
+    double columnvect_xyzglob[3];
+    from_loc_sphr_to_cart(columnvect_xyzloc, colatitude1, longitude1, columnvect_xyzglob);
+    from_cart_to_loc_sphr(columnvect_xyzglob, colatitude2, longitude2, columnvect_res);
+    return;
+
+}
+
