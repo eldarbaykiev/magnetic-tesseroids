@@ -27,7 +27,7 @@ The input model file should be a text file where each line describe one tesseroi
 `DENSITY` is the density _ρ_ of tesseroid in kilogram per cubic meter [kg/m^3]
 `SUSCEPTIBILITY` is the susceptibility _χ_ of tesseroid in SI units.
 `BX`, `BY` and `BZ` are the components of the magnetizing field in the local North-East-Up Cartesian coordinate system of a tesseroids' geometric center. They can be taken from any core field's model. Values are given in nanotesla [nT].
-In case of remanent magnetic field modelling, susceptibility must be set 1 SI and `BX`, `BY` and `BZ` values than would define the direction of remanent magnetization vector.
+In case of remanent magnetic field modeling, susceptibility must be set 1 SI and `BX`, `BY` and `BZ` values than would define the direction of remanent magnetization vector.
 This example shows a model made of 3 neighboring tesseroids near the North Pole:
 > `-74 -73 89 90 -1000.000000 -11650.000000 1.000000 1.000000 334.9504973176 -1969.9308033594 -56572.6324041700`
 
