@@ -389,18 +389,18 @@ int main(int argc, char**argv)
     
 
     
-      if ( count == 7)
-      {
-        fprintf(tessoutfp, "%s 1.0 %f %f %f\n", line, x, y, -z);
-      }
-      else if (count == 8)
-      {
-        fprintf(tessoutfp, "%s %f %f %f\n", line, x, y, -z);
-      }
-      else if (count == 11)
-      {
+      //if ( count == 7)
+      //{
+      //  fprintf(tessoutfp, "%s 1.0 %f %f %f\n", line, x, y, -z);
+      //}
+      //else if (count == 8)
+      //{
+      //  fprintf(tessoutfp, "%s %f %f %f\n", line, x, y, -z);
+      //}
+      //else if (count == 11)
+      //{
         fprintf(tessoutfp, "%.2f %.2f %.2f %.2f %.3f %.3f %f %f %f %f %f\n", W, E, S, N, HOT, HOB, DENSITY, SUSCEPT, x, y, -z);
-      }
+      //}
 
     }
     else
