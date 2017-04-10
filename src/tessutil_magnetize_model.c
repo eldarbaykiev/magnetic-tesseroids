@@ -391,11 +391,11 @@ int main(int argc, char**argv)
     
       if ( count == 7)
       {
-        fprintf(tessoutfp, "%s, 1.0, %f %f %f\n", line, x, y, -z);
+        fprintf(tessoutfp, "%s 1.0 %f %f %f\n", line, x, y, -z);
       }
       else if (count == 8)
       {
-        fprintf(tessoutfp, "%s, %f %f %f\n", line, x, y, -z);
+        fprintf(tessoutfp, "%s %f %f %f\n", line, x, y, -z);
       }
       else if (count == 11)
       {
