@@ -347,6 +347,8 @@ int main(int argc, char**argv)
     if (line[0] != '#')
     {
 
+	SUSCEPT = 1;
+
       if ( count == 7)
       {
         sscanf(line, "%f %f %f %f %f %f %f", &W, &E, &S, &N, &HOT, &HOB, &DENSITY);
