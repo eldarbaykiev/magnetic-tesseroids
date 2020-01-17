@@ -78,6 +78,8 @@ Usage:
 
 All grid files should be in tessgrd format. With option -c1 program read input grid bz as its direction is upward, with option -c2 - downward, just as in magnetic tesseroids output. Output of gradient calculator is always in North-East-Down coordinate system.
 
+Known issue: rounding error when processing grids with spacing equal or less than 0.2 degrees.
+
 ### tessutil_combine_grids
 Sums calculated grids.
 Usage:
