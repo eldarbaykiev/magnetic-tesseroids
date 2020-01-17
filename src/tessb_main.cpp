@@ -20,6 +20,7 @@ Generic main function for the tessb* programs.
 #include "linalg.h"
 
 
+
 /* Print the help message for tessh* programs */
 void print_tessb_help(const char *progname)
 {
@@ -46,10 +47,10 @@ int run_tessb_main(int argc, char **argv, const char *progname,
     TESSB_ARGS args;
     GLQ *glq_lon, *glq_lat, *glq_r;
     TESSEROID *model;
-	
+
     int modelsize, rc, line, points = 0, error_exit = 0, bad_input = 0;
     char buff[10000];
-	
+
     double lon, lat, height, res;
     FILE *logfile = NULL, *modelfile = NULL;
     time_t rawtime;
@@ -272,7 +273,7 @@ int run_tessb_main(int argc, char **argv, const char *progname,
             strstrip(buff);
 
 			/////////////ELDAR BAYKIEV//////////////
-			res = 0;			
+			res = 0;
             if(args.adaptative)
             {
 				for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
@@ -281,8 +282,8 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 					double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
 					double M_vect_p[3] = {0, 0, 0};
 
-					conv_vect_fast(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
-					
+					conv_vect_cblas(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
+
 					ggt_1 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field1, ratio1);
 					ggt_2 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field2, ratio2);
 					ggt_3 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field3, ratio3);
@@ -296,7 +297,7 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
             else
-            {	
+            {
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
 				{
@@ -304,8 +305,8 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 					double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
 					double M_vect_p[3] = {0, 0, 0};
 
-					conv_vect_fast(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
-					
+					conv_vect_cblas(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
+
 					ggt_1 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field1);
 					ggt_2 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field2);
 					ggt_3 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field3);

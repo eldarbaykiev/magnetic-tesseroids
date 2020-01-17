@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>            
+#include <stdlib.h>
 #include <string.h>
-#include <math.h> 
+#include <math.h>
 
-#include "constants.h" 
+#include "constants.h"
 #include "parsers.h"
 #include "linalg.h"
 
-#define MAX_GRID_POINTS 5000
+#define MAX_GRID_POINTS 50000
 
 #define GRID_FORMAT "%lf %lf %f %lf"
 
@@ -18,7 +18,7 @@
 void printcomp(double* longitudes, double* latitudes, double* values, int n_values)
 {
 
-  
+
 	for (int h = 0; h < n_values; h++)
         printf("%lf %lf %lf\n", longitudes[h], latitudes[h], values[h]);
 
@@ -27,7 +27,7 @@ void printcomp(double* longitudes, double* latitudes, double* values, int n_valu
 
 void printall(double* longitudes, double* latitudes, int n_values,  double* values1,  double* values2,  double* values3,  double* values4,  double* values5,  double* values6,  double* values7)
 {
-	
+
 
 	for (int h = 0; h < n_values; h++)
 		printf("%lf %lf %lf %lf %lf %lf %lf %lf %lf\n", longitudes[h], latitudes[h], values1[h], values2[h], values3[h], values4[h], values5[h], values6[h], values7[h]);
@@ -55,7 +55,7 @@ void print_gradcalc_help(const char *progname)
 
 
 
-	
+
 	//printf("TODO\n");
 }
 
@@ -94,7 +94,7 @@ int main(int argc, char**argv)
 		printf("#Coordinate system in input grids: North-East-Down\n");
 	else
 		printf("#Coordinate system in input grids: North-East-Up\n");
-	printf("#Coordinate system in output grid: North-East-Down\n");	
+	printf("#Coordinate system in output grid: North-East-Down\n");
 
 
 	double lons[MAX_GRID_POINTS];
@@ -109,7 +109,7 @@ int main(int argc, char**argv)
 	char * line = NULL;
 	size_t len = 0;
 	ssize_t read;
-	
+
 
 
 	FILE * bxfp = fopen(args.gridbx_fn, "r");
@@ -118,11 +118,11 @@ int main(int argc, char**argv)
 		printf("ERROR: Can not open file with Bx values.\n");
 		exit(EXIT_FAILURE);
 	}
-	
-	int n_lines = 0;
-	
 
-	
+	int n_lines = 0;
+
+
+
 	while ((read = getline(&line, &len, bxfp )) != -1)
 	{
 
@@ -134,7 +134,7 @@ int main(int argc, char**argv)
 				printf("ERROR: Too many grid points (> %d) in the input. Recompile program with a bigger value of MAX_GRID_POINTS.\n", n_lines);
 				exit(EXIT_FAILURE);
 			}
-	    
+
 			sscanf(line, GRID_FORMAT, &lons[n_lines-1], &lats[n_lines-1], &alts[n_lines-1], &bx[n_lines-1]);
 
 		}
@@ -189,7 +189,7 @@ int main(int argc, char**argv)
 	        printf("ERROR: Can not open file with Bx values.\n");
 	        exit(EXIT_FAILURE);
 	}
-    
+
 	int n_lines2 = 0;
 	while ((read = getline(&line, &len, byfp )) != -1)
 	{
@@ -198,7 +198,7 @@ int main(int argc, char**argv)
         	{
         		n_lines2++;
 			//printf("%s", line);
-        		double dummy1, dummy2; 
+        		double dummy1, dummy2;
 			float dummy3;
 			sscanf(line, GRID_FORMAT , &dummy1, &dummy2, &dummy3, &by[n_lines2-1]);
         	}
@@ -218,18 +218,18 @@ int main(int argc, char**argv)
         	printf("ERROR: Can not open file with Bx values.\n");
         	exit(EXIT_FAILURE);
 	}
-    
+
 	n_lines2 = 0;
 	while ((read = getline(&line, &len, bzfp )) != -1)
-	{   	
+	{
 		if ((line[0] != '#') && (strlen(line) > 2))
 		{
 			n_lines2++;
 			//printf("%s", line);
-			double dummy1, dummy2; 
+			double dummy1, dummy2;
 			float dummy3;
 			double bz_curr;
-			sscanf(line, GRID_FORMAT, &dummy1, &dummy2, &dummy3,&bz_curr);	
+			sscanf(line, GRID_FORMAT, &dummy1, &dummy2, &dummy3,&bz_curr);
 
 			bz[n_lines2-1] = args.bz_NEU_NED* bz_curr; //COORDINATE SYSTEM NEU or NED
 		}
@@ -241,7 +241,7 @@ int main(int argc, char**argv)
 		printf("ERROR: Grid points of Bx and Bz do not coincide.\n");
 		exit(EXIT_FAILURE);
 	}
-    
+
 
 	/* calculate gradients */
 
@@ -267,7 +267,7 @@ int main(int argc, char**argv)
 			east_ind 	= (j)	*lon_n	+	(i+1);
 			south_ind 	= (j-1)	*lon_n	+	(i);
 			north_ind 	= (j+1)	*lon_n	+	(i);
-			
+
 			//double vect_cent[3] = {bx[cent_ind], by[cent_ind], bz[cent_ind]};
 			double vect_west[3] = {bx[west_ind], by[west_ind], bz[west_ind]};
 			double vect_east[3] = {bx[east_ind], by[east_ind], bz[east_ind]};
@@ -307,7 +307,7 @@ int main(int argc, char**argv)
 
 		}
 	}
-	
+
 
 	switch(args.out_set)
 	{
@@ -342,10 +342,8 @@ int main(int argc, char**argv)
 		default:
 			printf("#All components: Bxx, Byx, Bzx, Bxy, Byy, Bzy, Bzz\n");
 			printall(lons, lats, n_lines, bxx, byx, bzx, bxy, byy, bzy, bzz);
-			break;	
-		
+			break;
+
 	}
-    
+
 }
-
-
