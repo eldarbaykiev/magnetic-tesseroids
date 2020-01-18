@@ -23,5 +23,7 @@ tessby:
 tessbz:
 	$(CC)  src/geometry.cpp src/glq.cpp src/grav_tess.cpp src/linalg.cpp src/logger.cpp src/parsers.cpp src/tessb_main.cpp src/tessbz.cpp src/version.cpp -o tessbz $(CFLAGS)
 
+
+
 clean:
 	rm tessbx tessby tessbz
