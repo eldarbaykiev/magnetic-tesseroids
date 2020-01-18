@@ -1,10 +1,24 @@
+/*
+Functions matrix and vector multiplications.
+
+*/
+
 #include "linalg.h"
 #include "constants.h"
 #include <math.h>
 
+//macOS only!
+//#include <Accelerate/Accelerate.h>
 
-#include <Accelerate/Accelerate.h>
+#ifdef __linux__ // Debian, Ubuntu, Gentoo, Fedora, openSUSE, RedHat, Centos and other
+	#include <cblas.h>
+#elif defined(__APPLE__) && defined(__MACH__)
+  #include <Accelerate/Accelerate.h>
+#else
+	//
+#endif
 
+/* Calculate magnetization vector in a coordinate system of a given point */
 void conv_vect_cblas(double *vect, double lon1, double lat1, double lon2, double lat2, double *res)
 {
 	double a1 = DEG2RAD*lat1;
@@ -42,7 +56,6 @@ void from_loc_sphr_to_cart(double* columnvect_xyzloc, double colatitude, double 
 {
 /*IMPORTANT: this subroutine is in the coordinate system NED*/
 
-
     double phi = colatitude*DEG2RAD;
     double lambda = longitude*DEG2RAD;
 
@@ -65,7 +78,6 @@ void from_loc_sphr_to_cart(double* columnvect_xyzloc, double colatitude, double 
 void from_cart_to_loc_sphr(double* columnvect_xyzglob, double colatitude, double longitude, double* columnvect_res)
 {
 /*IMPORTANT: this subroutine is in the coordinate system NED*/
-
 
     double phi = colatitude*DEG2RAD;
     double lambda = longitude*DEG2RAD;

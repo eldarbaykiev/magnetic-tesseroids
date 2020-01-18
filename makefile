@@ -1,14 +1,27 @@
-all: tessbx tessby tessbz tessutil_magnetize_model tessutil_gradient_calculator tessutil_combine_grids
+CC=
+CFLAGS=
+
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+  CC=gcc
+
+endif
+ifeq ($(UNAME), Darwin)
+  CC=clang
+	CFLAGS += -framework Accelerate
+endif
+
+all: tessbx tessby tessbz
 
 tessbx:
-	c++  -Wall src/geometry.cpp src/glq.cpp src/grav_tess.cpp src/linalg.cpp src/logger.cpp src/parsers.cpp src/tessb_main.cpp src/tessbx.cpp src/version.cpp -o tessbx -framework Accelerate
+	$(CC)  src/geometry.cpp src/glq.cpp src/grav_tess.cpp src/linalg.cpp src/logger.cpp src/parsers.cpp src/tessb_main.cpp src/tessbx.cpp src/version.cpp -o tessbx $(CFLAGS)
 
 tessby:
-	c++  -Wall src/geometry.cpp src/glq.cpp src/grav_tess.cpp src/linalg.cpp src/logger.cpp src/parsers.cpp src/tessb_main.cpp src/tessby.cpp src/version.cpp -o tessby -framework Accelerate
+	$(CC)  src/geometry.cpp src/glq.cpp src/grav_tess.cpp src/linalg.cpp src/logger.cpp src/parsers.cpp src/tessb_main.cpp src/tessby.cpp src/version.cpp -o tessby $(CFLAGS)
 
 tessbz:
-	c++  -Wall src/geometry.cpp src/glq.cpp src/grav_tess.cpp src/linalg.cpp src/logger.cpp src/parsers.cpp src/tessb_main.cpp src/tessbz.cpp src/version.cpp -o tessbz -framework Accelerate
-
+	$(CC)  src/geometry.cpp src/glq.cpp src/grav_tess.cpp src/linalg.cpp src/logger.cpp src/parsers.cpp src/tessb_main.cpp src/tessbz.cpp src/version.cpp -o tessbz $(CFLAGS)
 
 clean:
 	rm tessbx tessby tessbz

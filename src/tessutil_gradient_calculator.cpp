@@ -294,17 +294,11 @@ int main(int argc, char**argv)
 			byx[cent_ind] = -(vect_c_south[1]-vect_c_north[1])/dist_sn*1000.0;
 			bzx[cent_ind] = -(vect_c_south[2]-vect_c_north[2])/dist_sn*1000.0;
 
-			//printf("%lf %lf %lf \n", bxy[cent_ind], byy[cent_ind], bzy[cent_ind]);
-
 			bxy[cent_ind] = -(vect_c_west[0]-vect_c_east[0])/dist_we*1000.0;
 			byy[cent_ind] = -(vect_c_west[1]-vect_c_east[1])/dist_we*1000.0;
 			bzy[cent_ind] = -(vect_c_west[2]-vect_c_east[2])/dist_we*1000.0;
 
 			bzz[cent_ind] = -bxx[cent_ind] - byy[cent_ind];
-
-			//printf("%lf %lf %lf %lf %lf %lf %lf\n", bxx[cent_ind], byx[cent_ind], bzx[cent_ind], bxy[cent_ind], byy[cent_ind], bzy[cent_ind], bzz[cent_ind]);
-
-
 		}
 	}
 
