@@ -50,6 +50,7 @@ double calc_tess_model(TESSEROID *model, int size, double lonp, double latp, dou
 }
 
 
+
 /* Adaptatively calculate the field of a tesseroid model at a given point */
 double calc_tess_model_adapt(TESSEROID *model, int size, double lonp, double latp, double rp, GLQ *glq_lon, GLQ *glq_lat, GLQ *glq_r, double (*field)(TESSEROID, double, double, double, GLQ, GLQ, GLQ), double ratio)
 {

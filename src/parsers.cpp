@@ -13,6 +13,8 @@ Input and output parsing tools.
 #include "constants.h"
 #include "geometry.h"
 
+#include <math.h>
+
 
 /* Parse basic command line arguments for programs */
 int parse_basic_args(int argc, char **argv, const char *progname,
@@ -317,7 +319,7 @@ int parse_tessb_args(int argc, char **argv, const char *progname,
 							break;
 						}
 					}
-					//ELDAR BAYKIEV///////////////////////////////////////////////////////////////////        
+					//ELDAR BAYKIEV///////////////////////////////////////////////////////////////////
                 }
                 default:
                     log_error("invalid argument '%s'", argv[i]);
@@ -430,11 +432,11 @@ int parse_gradcalc_args(int argc, char **argv, const char *progname, GRADCALC_AR
 								{
 									printf("invalid argument '%s', gridfile bx already set\n", argv[i]);
 									bad_args++;
-									break;   
+									break;
 								}
 								else
 								{
-				    					args->gridbx_set = 1; 
+				    					args->gridbx_set = 1;
 									args->gridbx_fn = &argv[i][3];
 								}
                                 				break;
@@ -443,7 +445,7 @@ int parse_gradcalc_args(int argc, char **argv, const char *progname, GRADCALC_AR
 								{
 									printf("invalid argument '%s', gridfile by already set\n", argv[i]);
 									bad_args++;
-									break;   
+									break;
 								}
 								else
 								{
@@ -456,7 +458,7 @@ int parse_gradcalc_args(int argc, char **argv, const char *progname, GRADCALC_AR
 								{
 									printf("invalid argument '%s', gridfile by already set\n", argv[i]);
 									bad_args++;
-									break;   
+									break;
 								}
 								else
 								{
@@ -478,7 +480,7 @@ int parse_gradcalc_args(int argc, char **argv, const char *progname, GRADCALC_AR
 					{
 						printf("invalid argument '%s', coordinate system is already set\n", argv[i]);
 						bad_args++;
-						break;   
+						break;
 					}
 					if(strlen(params) > 1)
 					{
@@ -512,7 +514,7 @@ int parse_gradcalc_args(int argc, char **argv, const char *progname, GRADCALC_AR
 					{
 						printf("invalid argument '%s', output format is already set\n", argv[i]);
 						bad_args++;
-						break;   
+						break;
 					}
 
 					if(strlen(params) != 1)
@@ -584,9 +586,11 @@ int gets_mag_tess(const char *str, TESSEROID *tess)
 	tess->Bx = Bx;
 	tess->By = By;
 	tess->Bz = Bz;
-	//tess->Rx = Rx;
-	//tess->Ry = Ry;
-	//tess->Rz = Rz;
+
+  tess->cos_a1 = cos(PI/2.0-DEG2RAD*(w+e)*0.5);
+  tess->sin_a1 = sin(PI/2.0-DEG2RAD*(w+e)*0.5);
+  tess->cos_b1 = cos(DEG2RAD*(s+n)*0.5);
+  tess->sin_b1 = sin(DEG2RAD*(s+n)*0.5);
     return 0;
 }
 

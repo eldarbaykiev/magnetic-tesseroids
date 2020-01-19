@@ -19,23 +19,23 @@ Generic main function for the tessb* programs.
 #include "tessb_main.h"
 #include "linalg.h"
 
-
+#include <math.h>
 
 /* Print the help message for tessh* programs */
 void print_tessb_help(const char *progname)
 {
-	printf("MAGNETIC TESSEROIDS\n");
-    printf("Usage: %s MODELFILE [OPTIONS]\n\n", progname);
-    if(strcmp(progname + 4, "pot") == 0)
-    {
-        printf("Calculate the potential due to a tesseroid model on\n");
-    }
-    else
-    {
-        printf("Calculate the %s component due to a tesseroid model on\n",
-               progname + 4);
-    }
-    printf("TODO\n");
+		printf("MAGNETIC TESSEROIDS\n");
+	  printf("Usage: %s MODELFILE [OPTIONS]\n\n", progname);
+	  if(strcmp(progname + 4, "pot") == 0)
+	  {
+	  		printf("Calculate the potential due to a tesseroid model on\n");
+	  }
+	  else
+	  {
+	      printf("Calculate the %s component due to a tesseroid model on\n",
+	             progname + 4);
+	  }
+	  printf("TODO\n");
 }
 
 
@@ -52,16 +52,24 @@ int run_tessb_main(int argc, char **argv, const char *progname,
     char buff[10000];
 
     double lon, lat, height, res;
+
+		/*variables for precalculation of trigonometrical functions for tesseroid centers*/
+		double cos_a2, sin_a2, cos_b2, sin_b2;
+
+		/*variables for precalculation of trigonometrical functions for grid points*/
+		double lon_prev, lat_prev;
+		double cos_a2_prev, sin_a2_prev, cos_b2_prev, sin_b2_prev;
+
     FILE *logfile = NULL, *modelfile = NULL;
     time_t rawtime;
     clock_t tstart;
     struct tm * timeinfo;
 
-	double (*field1)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
-	double (*field2)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
-	double (*field3)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
-	double ggt_1, ggt_2, ggt_3;
-	int n_tesseroid;
+		double (*field1)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
+		double (*field2)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
+		double (*field3)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
+		double ggt_1, ggt_2, ggt_3;
+		int n_tesseroid;
 
 
     log_init(LOG_INFO);
@@ -102,11 +110,11 @@ int run_tessb_main(int argc, char **argv, const char *progname,
     {
         ratio1 = args.ratio1;
     }
-	if(args.ratio2 != 0)
+	  if(args.ratio2 != 0)
     {
         ratio2 = args.ratio2;
     }
-	if(args.ratio3 != 0)
+	  if(args.ratio3 != 0)
     {
         ratio3 = args.ratio3;
     }
@@ -119,8 +127,8 @@ int run_tessb_main(int argc, char **argv, const char *progname,
     log_info("Use recursive division of tesseroids: %s",
              args.adaptative ? "True" : "False");
     log_info("Distance-size ratio1 for recusive division: %g", ratio1);
-	log_info("Distance-size ratio2 for recusive division: %g", ratio2);
-	log_info("Distance-size ratio3 for recusive division: %g", ratio3);
+	  log_info("Distance-size ratio2 for recusive division: %g", ratio2);
+	  log_info("Distance-size ratio3 for recusive division: %g", ratio3);
 
     /* Make the necessary GLQ structures */
     log_info("Using GLQ orders: %d lon / %d lat / %d r", args.lon_order,
@@ -190,58 +198,41 @@ int run_tessb_main(int argc, char **argv, const char *progname,
     printf("#   Use recursive division of tesseroids: %s\n",
            args.adaptative ? "True" : "False");
     printf("#   Distance-size ratio1 for recusive division: %g\n", ratio1);
-	printf("#   Distance-size ratio2 for recusive division: %g\n", ratio2);
-	printf("#   Distance-size ratio3 for recusive division: %g\n", ratio3);
+		printf("#   Distance-size ratio2 for recusive division: %g\n", ratio2);
+		printf("#   Distance-size ratio3 for recusive division: %g\n", ratio3);
 
-	/////////////ELDAR BAYKIEV//////////////
-	if (!strcmp("tessbx", progname))
-	{
-		field1 = &tess_gxx;
-		field2 = &tess_gxy;
-		field3 = &tess_gxz;
-	}
+		/////////////ELDAR BAYKIEV//////////////
+		/* Assign pointers to functions that calculate gravity gradient tensor components */
+		if (!strcmp("tessbx", progname))
+		{
+				field1 = &tess_gxx;
+				field2 = &tess_gxy;
+				field3 = &tess_gxz;
+		}
 
-	if (!strcmp("tessby", progname))
-	{
-		field1 = &tess_gxy;
-		field2 = &tess_gyy;
-		field3 = &tess_gyz;
-	}
+		if (!strcmp("tessby", progname))
+		{
+				field1 = &tess_gxy;
+				field2 = &tess_gyy;
+				field3 = &tess_gyz;
+		}
 
-	if (!strcmp("tessbz", progname))
-	{
-		field1 = &tess_gxz;
-		field2 = &tess_gyz;
-		field3 = &tess_gzz;
-	}
-	/////////////ELDAR BAYKIEV//////////////
+		if (!strcmp("tessbz", progname))
+		{
+				field1 = &tess_gxz;
+				field2 = &tess_gyz;
+				field3 = &tess_gzz;
+		}
+		/////////////ELDAR BAYKIEV//////////////
 
-    /* Read each computation point from stdin and calculate */
-    log_info("Calculating (this may take a while)...");
-    tstart = clock();
+	  /* Read each computation point from stdin and calculate */
+	  log_info("Calculating (this may take a while)...");
+	  tstart = clock();
 
+		///////////////
+		lon_prev = 0;
+		lat_prev = 0;
 
-
-	////////////////
-
-	/*for(line = 1; !feof(stdin); line++)
-    {
-		if(fgets(filebuff[line], 10000, stdin) == NULL)
-        {
-            if(ferror(stdin))
-            {
-                log_error("problem encountered reading line %d", line);
-                error_exit = 1;
-                break;
-            }
-        }
-
-
-	}*/
-
-
-	//MAKE PRELOADED FILE
-	///////////////
     for(line = 1; !feof(stdin); line++)
     {
         if(fgets(buff, 10000, stdin) == NULL)
@@ -272,47 +263,82 @@ int run_tessb_main(int argc, char **argv, const char *progname,
                result in the end */
             strstrip(buff);
 
+
+
 			/////////////ELDAR BAYKIEV//////////////
-			res = 0;
+		        res = 0;
             if(args.adaptative)
             {
-				for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
-				{
-					double B_to_H = model[n_tesseroid].suscept/(M_0);//IMPORTANT
-					double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
-					double M_vect_p[3] = {0, 0, 0};
+								for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
+								{
+										double B_to_H = model[n_tesseroid].suscept/(M_0);//IMPORTANT
+										double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
+										double M_vect_p[3] = {0, 0, 0};
 
-					conv_vect_cblas(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
+										conv_vect_cblas(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
 
-					ggt_1 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field1, ratio1);
-					ggt_2 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field2, ratio2);
-					ggt_3 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field3, ratio3);
+										ggt_1 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field1, ratio1);
+										ggt_2 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field2, ratio2);
+										ggt_3 = calc_tess_model_adapt(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field3, ratio3);
 
-					res = res + M_0*EOTVOS2SI*(ggt_1 * M_vect_p[0]  + ggt_2 * M_vect_p[1] + ggt_3 * M_vect_p[2]) /(G*model[n_tesseroid].density*4*PI);
+										res = res + M_0*EOTVOS2SI*(ggt_1 * M_vect_p[0]  + ggt_2 * M_vect_p[1] + ggt_3 * M_vect_p[2]) /(G*model[n_tesseroid].density*4*PI);
 
-					//printf("res %g\n", res);
-				}
+										//printf("res %g\n", res);
+								}
 
-
-				/////////////////////////////////////////////////////////////////////////////////////////////////////////
+						/////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
             else
             {
+								//precalculate trigonometrical functions
+
+								if(lon == lon_prev)
+								{
+										cos_b2 = cos_b2_prev;
+										sin_b2 = sin_b2_prev;
+								}
+								else
+								{
+										cos_b2 = cos(DEG2RAD*lon);
+										sin_b2 = sin(DEG2RAD*lon);
+								}
+
+								if(lat == lat_prev)
+								{
+										cos_a2 = cos_a2_prev;
+										sin_a2 = sin_a2_prev;
+								}
+								else
+								{
+										cos_a2 = cos(PI/2.0-DEG2RAD*lat);
+										sin_a2 = sin(PI/2.0-DEG2RAD*lat);
+								}
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////
-				for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
-				{
-					double B_to_H = model[n_tesseroid].suscept/(M_0);//IMPORTANT
-					double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
-					double M_vect_p[3] = {0, 0, 0};
+								for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
+								{
+										//ELDAR: TODO: PRECALCULATE SIC COSINE TABLES
+										double B_to_H = model[n_tesseroid].suscept/(M_0);//IMPORTANT
+										double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
+										double M_vect_p[3] = {0, 0, 0};
 
-					conv_vect_cblas(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
+										//conv_vect_cblas(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
+									  conv_vect_cblas_precalc(M_vect, model[n_tesseroid].cos_a1, model[n_tesseroid].sin_a1, model[n_tesseroid].cos_b1, model[n_tesseroid].sin_b1, cos_a2, sin_a2, cos_b2, sin_b2, M_vect_p);
 
-					ggt_1 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field1);
-					ggt_2 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field2);
-					ggt_3 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field3);
+										ggt_1 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field1);
+										ggt_2 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field2);
+										ggt_3 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field3);
 
-					res = res + M_0*EOTVOS2SI*(ggt_1 * M_vect_p[0]  + ggt_2 * M_vect_p[1] + ggt_3 * M_vect_p[2]) /(G*model[n_tesseroid].density*4*PI);
-				}
+										res = res + M_0*EOTVOS2SI*(ggt_1 * M_vect_p[0]  + ggt_2 * M_vect_p[1] + ggt_3 * M_vect_p[2]) /(G*model[n_tesseroid].density*4*PI);
+								}
+
+								lon_prev = lon;
+								lat_prev = lat;
+
+								cos_a2_prev = cos_a2;
+								sin_a2_prev = sin_a2;
+
+								cos_b2_prev = cos_b2;
+								sin_b2_prev = sin_b2;
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
             printf("%s %.15g\n", buff, res);

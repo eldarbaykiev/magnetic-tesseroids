@@ -17,10 +17,15 @@ typedef struct tess_struct {
     double n; /* northern latitude border in degrees */
     double r1; /* smallest radius border in SI units */
     double r2; /* largest radius border in SI units */
-	double suscept; /* magnetic susceptibility */
-	double Bx; /* x-component of ambient magnetic field */
-	double By; /* y-component of ambient magnetic field */
-	double Bz; /* z-component of ambient magnetic field */
+	  double suscept; /* magnetic susceptibility */
+	  double Bx; /* x-component of ambient magnetic field */
+	  double By; /* y-component of ambient magnetic field */
+	  double Bz; /* z-component of ambient magnetic field */
+
+    double cos_a1;
+    double sin_a1;
+    double cos_b1;
+    double sin_b1;
 	//double Rx;
 	//double Ry;
 	//double Rz;

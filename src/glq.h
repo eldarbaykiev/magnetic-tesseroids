@@ -114,8 +114,6 @@ be reset using this function.
     - 2: if NULL pointer for nodes or nodes_unscaled
 */
 int glq_set_limits(double lower, double upper, GLQ *glq);
-
-
 /** Calculates the GLQ nodes using glq_next_root.
 
 Nodes will be in the [-1,1] interval. To convert them to the integration limits
