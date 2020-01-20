@@ -86,3 +86,22 @@ Usage:
 > `tessutil_combine_grids [grid file1] [factor1] ... [grid fileN] [factorN] >> output_file.dat`
 
 Each grid is multiplied by factor (susceptibility) and then the sum of all grids is calculated.
+
+## Installation (version 1.1)
+1. Download source code from GitHub:
+
+> `git clone https://github.com/eldarbaykiev/magnetic-tesseroids.git`
+
+1. On Linux, install OpenBLAS library:
+
+> `sudo apt-get install libopenblas-base libopenblas-dev`
+
+On macOS, make sure that xcode is installed and Accelerate framework (https://developer.apple.com/documentation/accelerate) is available
+
+1. Run make
+
+> `make`
+
+To compile all utilities, run
+
+> `make tools`
