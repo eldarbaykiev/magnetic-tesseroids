@@ -30,7 +30,9 @@ The input model file should be a text file where each line describe one tesseroi
 In case of remanent magnetic field modeling, susceptibility must be set 1 SI and `BX`, `BY` and `BZ` values than would define the direction of remanent magnetization vector.
 This example shows a model made of 3 neighboring tesseroids near the North Pole:
 > `-74 -73 89 90 -1000.000000 -11650.000000 1.000000 1.000000 334.9504973176 -1969.9308033594 -56572.6324041700`
+
 > `-73 -72 89 90 -1000.000000 -11650.000000 1.000000 1.000000 370.1879538142 -1968.1093976826 -56571.2826313492`
+
 > `-72 -71 89 90 -1000.000000 -11650.000000 1.000000 1.000000 405.4388222633 -1965.6409379187 -56569.9502088641`
 
 ### Input: computation grid
@@ -42,10 +44,15 @@ Computation grid can be regular or irregular and should be also a text file wher
 Note that the program tessgrd from original tesseroids-1.1 can be used to create a regular computation grid (see Uieda, 2013).
 This example shows a grid made of 6 points with the same latitude and the altitude of 400 km:
 > `-6 	51 400000 `
+
 > `-5.8 51 400000 `
+
 > `-5.6 51 400000 `
+
 > `-5.4 51 400000 `
+
 > `-5.2 51 400000 `
+
 > `-5 	51 400000` 
 
 ### Performing calculations
@@ -75,7 +82,7 @@ Usage:
 tessutil_gradient_calculator -bx[Bx grid file] -by[By grid file] -bz[Bx grid file] -o[output component] -c2 >> output_file.dat
 ```
 
-All grid files should be in tessgrd format. With option -c1 program read input grid bz as its direction is upward, with option -c2 - downward, just as in magnetic tesseroids output. Output of gradient calculator is always in North-East-Down coordinate system.
+All grid files should be in tessgrd format. With option `-c1` program reads input grid bz as its direction is upward, with option `-c2` - downward, just as in magnetic tesseroids output. Output of gradient calculator is always in North-East-Down coordinate system.
 
 Known issue: rounding error when processing grids with spacing equal or less than 0.2 degrees.
 
@@ -95,7 +102,7 @@ Each grid is multiplied by factor (susceptibility) and then the sum of all grids
 git clone https://github.com/eldarbaykiev/magnetic-tesseroids.git
 ```
 
-1. On **Linux**, install [OpenBLAS](https://www.openblas.net/) library:
+2. On **Linux**, install [OpenBLAS](https://www.openblas.net/) library:
 
 ```
 sudo apt-get install libopenblas-base libopenblas-dev
@@ -103,7 +110,7 @@ sudo apt-get install libopenblas-base libopenblas-dev
 
 On **macOS**, make sure that [Xcode](https://developer.apple.com/xcode/) is installed and [Accelerate framework](https://developer.apple.com/documentation/accelerate) is available.
 
-1. Run **make**
+3. Run **make**
 
 ```
 make
