@@ -30,9 +30,7 @@ The input model file should be a text file where each line describe one tesseroi
 In case of remanent magnetic field modeling, susceptibility must be set 1 SI and `BX`, `BY` and `BZ` values than would define the direction of remanent magnetization vector.
 This example shows a model made of 3 neighboring tesseroids near the North Pole:
 > `-74 -73 89 90 -1000.000000 -11650.000000 1.000000 1.000000 334.9504973176 -1969.9308033594 -56572.6324041700`
-
 > `-73 -72 89 90 -1000.000000 -11650.000000 1.000000 1.000000 370.1879538142 -1968.1093976826 -56571.2826313492`
-
 > `-72 -71 89 90 -1000.000000 -11650.000000 1.000000 1.000000 405.4388222633 -1965.6409379187 -56569.9502088641`
 
 ### Input: computation grid
@@ -44,20 +42,17 @@ Computation grid can be regular or irregular and should be also a text file wher
 Note that the program tessgrd from original tesseroids-1.1 can be used to create a regular computation grid (see Uieda, 2013).
 This example shows a grid made of 6 points with the same latitude and the altitude of 400 km:
 > `-6 	51 400000 `
-
 > `-5.8 51 400000 `
-
 > `-5.6 51 400000 `
-
 > `-5.4 51 400000 `
-
 > `-5.2 51 400000 `
-
 > `-5 	51 400000` 
 
 ### Performing calculations
 Example: to calculate the vertical component of the magnetic field of a model in file modelfile.txt on a grid from file gridpoints.txt one can simply use a console command:
-> `tessbz modelfile.txt < gridpoints.txt > gz_output.txt`
+```
+tessbz modelfile.txt < gridpoints.txt > gz_output.txt
+```
 
 The result would be written in the file gz_output.txt.
 ### Output format
@@ -69,12 +64,16 @@ Magnetic tesseroids support features like piping and integration accuracy adjust
 ### tessutil_magnetize_model
 This program is made to 'magnetize' any existing tesseroid model by any given main field spherical harmonic model.
 Usage: 
-> `tessutil_magnetize_model [SH coeff file] [input tesseroid model file] [day] [month] [year] [output tesseroid model file] `
+```
+tessutil_magnetize_model [SH coeff file] [input tesseroid model file] [day] [month] [year] [output tesseroid model file]
+```
 
 ### tessutil_gradient_calculator
 Gradient calculator (Baykiev et al., in press).
 Usage: 
-> `tessutil_gradient_calculator -bx[Bx grid file] -by[By grid file] -bz[Bx grid file] -o[output component] -c2 >> output_file.dat`
+```
+tessutil_gradient_calculator -bx[Bx grid file] -by[By grid file] -bz[Bx grid file] -o[output component] -c2 >> output_file.dat
+```
 
 All grid files should be in tessgrd format. With option -c1 program read input grid bz as its direction is upward, with option -c2 - downward, just as in magnetic tesseroids output. Output of gradient calculator is always in North-East-Down coordinate system.
 
@@ -83,25 +82,35 @@ Known issue: rounding error when processing grids with spacing equal or less tha
 ### tessutil_combine_grids
 Sums calculated grids.
 Usage:
-> `tessutil_combine_grids [grid file1] [factor1] ... [grid fileN] [factorN] >> output_file.dat`
+```
+tessutil_combine_grids [grid file1] [factor1] ... [grid fileN] [factorN] >> output_file.dat
+```
 
 Each grid is multiplied by factor (susceptibility) and then the sum of all grids is calculated.
 
 ## Installation (version 1.1)
-1. Download source code from GitHub:
+1. Download source code from [GitHub](https://github.com/eldarbaykiev/magnetic-tesseroids):
 
-> `git clone https://github.com/eldarbaykiev/magnetic-tesseroids.git`
+```
+git clone https://github.com/eldarbaykiev/magnetic-tesseroids.git
+```
 
-1. On Linux, install OpenBLAS library:
+1. On **Linux**, install [OpenBLAS](https://www.openblas.net/) library:
 
-> `sudo apt-get install libopenblas-base libopenblas-dev`
+```
+sudo apt-get install libopenblas-base libopenblas-dev
+```
 
-On macOS, make sure that xcode is installed and Accelerate framework (https://developer.apple.com/documentation/accelerate) is available
+On **macOS**, make sure that [Xcode](https://developer.apple.com/xcode/) is installed and [Accelerate framework](https://developer.apple.com/documentation/accelerate) is available.
 
-1. Run make
+1. Run **make**
 
-> `make`
+```
+make
+```
 
 To compile all utilities, run
 
-> `make tools`
+```
+make tools
+```
