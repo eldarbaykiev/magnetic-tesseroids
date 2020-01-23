@@ -1,7 +1,6 @@
 # Forward modeling of magnetic field in spherical coordinates
 
-Magnetic tesseroids is a collection of command-line tools for modeling the magnetic field.
-The magnetization models can be made of right rectangular prisms or tesseroids (spherical prisms). 
+Magnetic tesseroids is a collection of command-line tools for modelling of the magnetic field with spherical prisms (tesseroids) used as magnetic sources.
 
 To cite _magnetic tesseroids_ in publications, please use our paper published in Computers & Geosciences:
 
