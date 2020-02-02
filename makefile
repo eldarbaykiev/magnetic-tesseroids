@@ -1,17 +1,18 @@
 CC=
 CFLAGS=
 POSTFIX=compound
+CFLAGSOPT=
 
 UNAME := $(shell uname)
 
 ifeq ($(UNAME), Linux)
 	CC=gcc
-	CFLAGS += -lopenblas -lm
+	CFLAGS += -lopenblas -lm $(CFLAGSOPT)
 
 endif
 ifeq ($(UNAME), Darwin)
 	CC=clang
-	CFLAGS += -framework Accelerate
+	CFLAGS += -framework Accelerate $(CFLAGSOPT)
 endif
 
 all: tessbx tessby tessbz
