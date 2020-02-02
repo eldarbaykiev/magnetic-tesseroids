@@ -68,7 +68,9 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 		double (*field1)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
 		double (*field2)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
 		double (*field3)(TESSEROID, double, double, double, GLQ, GLQ, GLQ);
+		void (*field_triple)(TESSEROID, double, double, double, GLQ, GLQ, GLQ, double*);
 		double ggt_1, ggt_2, ggt_3;
+		double gtt_v[3];
 		int n_tesseroid;
 
 
@@ -208,6 +210,8 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 				field1 = &tess_gxx;
 				field2 = &tess_gxy;
 				field3 = &tess_gxz;
+
+				field_triple = &tess_gxx_gxy_gxz;
 		}
 
 		if (!strcmp("tessby", progname))
@@ -215,6 +219,8 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 				field1 = &tess_gxy;
 				field2 = &tess_gyy;
 				field3 = &tess_gyz;
+
+				field_triple = &tess_gxy_gyy_gyz;
 		}
 
 		if (!strcmp("tessbz", progname))
@@ -222,6 +228,8 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 				field1 = &tess_gxz;
 				field2 = &tess_gyz;
 				field3 = &tess_gzz;
+
+				field_triple = &tess_gxz_gyz_gzz;
 		}
 		/////////////ELDAR BAYKIEV//////////////
 
@@ -271,6 +279,9 @@ int run_tessb_main(int argc, char **argv, const char *progname,
             {
 								for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
 								{
+										gtt_v[0] = 0;
+										gtt_v[1] = 0;
+										gtt_v[2] = 0;
 										double B_to_H = model[n_tesseroid].suscept/(M_0);//IMPORTANT
 										double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
 										double M_vect_p[3] = {0, 0, 0};
@@ -316,6 +327,9 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////
 								for(n_tesseroid = 0; n_tesseroid < modelsize; n_tesseroid++)
 								{
+										gtt_v[0] = 0;
+										gtt_v[1] = 0;
+										gtt_v[2] = 0;
 										//ELDAR: TODO: PRECALCULATE SIC COSINE TABLES
 										double B_to_H = model[n_tesseroid].suscept/(M_0);//IMPORTANT
 										double M_vect[3] = {model[n_tesseroid].Bx * B_to_H, model[n_tesseroid].By * B_to_H, model[n_tesseroid].Bz * B_to_H};
@@ -324,11 +338,10 @@ int run_tessb_main(int argc, char **argv, const char *progname,
 										//conv_vect_cblas(M_vect, (model[n_tesseroid].w + model[n_tesseroid].e)*0.5, (model[n_tesseroid].s + model[n_tesseroid].n)*0.5, lon, lat, M_vect_p);
 									  conv_vect_cblas_precalc(M_vect, model[n_tesseroid].cos_a1, model[n_tesseroid].sin_a1, model[n_tesseroid].cos_b1, model[n_tesseroid].sin_b1, cos_a2, sin_a2, cos_b2, sin_b2, M_vect_p);
 
-										ggt_1 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field1);
-										ggt_2 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field2);
-										ggt_3 = calc_tess_model(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field3);
+										calc_tess_model_triple(&model[n_tesseroid], 1, lon, lat, height + MEAN_EARTH_RADIUS, glq_lon, glq_lat, glq_r, field_triple, gtt_v);
 
-										res = res + M_0*EOTVOS2SI*(ggt_1 * M_vect_p[0]  + ggt_2 * M_vect_p[1] + ggt_3 * M_vect_p[2]) /(G*model[n_tesseroid].density*4*PI);
+										res = res + M_0*EOTVOS2SI*(gtt_v[0] * M_vect_p[0]  + gtt_v[1] * M_vect_p[1] + gtt_v[2] * M_vect_p[2]) /(G*model[n_tesseroid].density*4*PI);
+
 								}
 
 								lon_prev = lon;

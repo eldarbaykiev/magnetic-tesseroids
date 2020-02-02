@@ -75,6 +75,8 @@ Karlsruhe, Germany.
 #include "glq.h"
 
 double calc_tess_model(TESSEROID *model, int size, double lonp, double latp, double rp, GLQ *glq_lon, GLQ *glq_lat, GLQ *glq_r, double (*field)(TESSEROID, double, double, double, GLQ, GLQ, GLQ));
+void calc_tess_model_triple(TESSEROID *model, int size, double lonp, double latp, double rp, GLQ *glq_lon, GLQ *glq_lat, GLQ *glq_r,
+  void (*field_triple)(TESSEROID, double, double, double, GLQ, GLQ, GLQ, double*), double *res);
 double calc_tess_model_adapt(TESSEROID *model, int size, double lonp, double latp, double rp, GLQ *glq_lon, GLQ *glq_lat, GLQ *glq_r, double (*field)(TESSEROID, double, double, double, GLQ, GLQ, GLQ), double ratio);
 
 double tess_gxx(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon, GLQ glq_lat, GLQ glq_r);
@@ -83,5 +85,9 @@ double tess_gxz(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon
 double tess_gyy(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon, GLQ glq_lat, GLQ glq_r);
 double tess_gyz(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon, GLQ glq_lat, GLQ glq_r);
 double tess_gzz(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon, GLQ glq_lat, GLQ glq_r);
+
+void tess_gxz_gyz_gzz(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon, GLQ glq_lat, GLQ glq_r, double *res);
+void tess_gxx_gxy_gxz(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon, GLQ glq_lat, GLQ glq_r, double *res);
+void tess_gxy_gyy_gyz(TESSEROID tess, double lonp, double latp, double rp, GLQ glq_lon, GLQ glq_lat, GLQ glq_r, double *res);
 
 #endif
